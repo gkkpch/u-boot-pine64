@@ -352,23 +352,23 @@
 	"initrd_filename=initrd.img\0" \
 	"bootenv_filename=uEnv.txt\0" \
 	"load_bootenv=" \
-		"fatload mmc ${boot_part} ${load_addr} ${bootenv_filename}\0" \
+		"for prefix in / /boot/; do if test -e mmc ${boot_part} ${prefix}${bootenv_filename}; then load mmc ${boot_part} ${load_addr} ${prefix}${bootenv_filename}; fi; done\0" \
 	"import_bootenv=" \
 		"env import -t ${load_addr} ${filesize}\0" \
 	"load_dtb=" \
 		"if test ${fdt_filename} = \"\"; then " \
 			"setenv fdt_filename ${fdt_filename_prefix}${pine64_model}${fdt_filename_suffix}; " \
 		"fi; " \
-		"fatload mmc ${boot_part} ${fdt_addr} ${fdt_filename}; " \
+		"load mmc ${boot_part} ${fdt_addr} ${fdt_filename}; " \
 		"fdt addr ${fdt_addr}; fdt resize\0" \
 	"load_kernel=" \
-		"fatload mmc ${boot_part} ${kernel_addr} ${kernel_filename}\0" \
+		"load mmc ${boot_part} ${kernel_addr} ${kernel_filename}\0" \
 	"boot_kernel=booti ${kernel_addr} ${initrd_addr}:${initrd_size} ${fdt_addr}\0" \
 	"load_initrd=" \
-		"fatload mmc ${boot_part} ${initrd_addr} ${initrd_filename}; "\
+		"load mmc ${boot_part} ${initrd_addr} ${initrd_filename}; "\
 		"setenv initrd_size ${filesize}\0" \
 	"load_bootscript=" \
-		"fatload mmc ${boot_part} ${load_addr} ${script}\0" \
+		"for prefix in / /boot/; do if test -e mmc ${boot_part} ${prefix}${script}; then load mmc ${boot_part} ${load_addr} ${prefix}${script}; fi; done\0" \
 	"scriptboot=source ${load_addr}\0" \
 	"set_cmdline=" \
 		"setenv bootargs console=${console} ${optargs} " \
@@ -427,6 +427,7 @@
 #define CONFIG_MACH_SUN50I
 #define CONFIG_CMD_BOOTI
 #define CONFIG_CMD_EXT4
+#define CONFIG_CMD_FS_GENERIC
 #define CONFIG_FAT_WRITE
 #undef CONFIG_ENV_IS_IN_SUNXI_FLASH
 #define CONFIG_ENV_IS_IN_FAT
