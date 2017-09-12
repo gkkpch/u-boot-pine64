@@ -567,6 +567,9 @@ int mmc_decode_ext_csd(struct mmc *mmc,
 
 
 	dec_ext_csd->rev = ext_csd[EXT_CSD_REV];
+	// HACK: support eMMC 5.1 modules
+	if (dec_ext_csd->rev > 7) dec_ext_csd->rev = 7;
+
 	if (dec_ext_csd->rev > 7) {
 		MMCINFO("unrecognised EXT_CSD revision %d\n", dec_ext_csd->rev);
 		err = -1;
@@ -2272,7 +2275,9 @@ static int mmc_complete_init(struct mmc *mmc)
 	err = sunxi_switch_to_best_bus(mmc);
 	if (err) {
 		MMCINFO("switch to best speed mode fail\n");
-		return err;
+		// HACK: Allow to use different bus speed
+		// return err;
+		err = 0;
 	}
 
 	init_part(&mmc->block_dev); /* it will send cmd17 */
@@ -2710,7 +2715,9 @@ retry:
 	err = sunxi_switch_to_best_bus(mmc);
 	if (err) {
 		MMCINFO("switch to best speed mode fail\n");
-		return err;
+		// HACK: Allow to use different bus speed
+		// return err;
+		err = 0;
 	}
 
 	init_part(&mmc->block_dev);
