@@ -1,4 +1,10 @@
 /*
+ * (C) Copyright 2013-2016
+ * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+ *
+ * SPDX-License-Identifier:     GPL-2.0+
+ */
+/*
  * (C) Copyright 2007-2012
  * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
  *
@@ -47,7 +53,7 @@
 #define mmcdbg(fmt...)	printf("[mmc]: "fmt)
 #define mmcmsg(fmt...)	printf(fmt)
 #else
-#define mmcinfo(fmt...)
+#define mmcinfo(fmt...)	printf("[mmc]: "fmt)
 #define mmcdbg(fmt...)
 #define mmcmsg(fmt...)
 #endif
@@ -65,6 +71,6 @@
 #define DRAM_START_ADDR				(0x40000000)
 
 
-#define DRIVER_VER  "2015-05-08 20:06"
+#define DRIVER_VER  "2016-07-01 17:05"
 
 #endif /* _MMC_H_ */

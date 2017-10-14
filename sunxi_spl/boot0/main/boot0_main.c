@@ -48,6 +48,8 @@ extern void set_debugmode_flag(void);
 extern void set_pll( void );
 extern char boot0_hash_value[64];
 
+int mmc_config_addr = (int)(BT0_head.prvt_head.storage_data);
+
 void __attribute__((weak)) bias_calibration(void)
 {
 	return;
