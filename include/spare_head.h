@@ -66,8 +66,12 @@
 #define BOOT0_EMMC3_BACKUP_START_ADDR           (512)
 
 
+#ifndef CONFIG_SUNXI_SECURE_SYSTEM
+#define UBOOT_START_SECTOR_IN_SDMMC             (38192)
+#else
 #define UBOOT_START_SECTOR_IN_SDMMC             (32800)
-#define UBOOT_BACKUP_START_SECTOR_IN_SDMMC      (24576)
+#define UBOOT_START_SECTOR_PRE_IN_SDMMC         (38192)
+#endif
 
 
 #define SUNXI_NORMAL_MODE                            0
