@@ -1185,7 +1185,8 @@ int sunxi_mmc_init(int sdc_no, unsigned bus_width, const normal_gpio_cfg *gpio_i
 	if ((sdc_no == 0) || (sdc_no == 1))
 		mmc_host[sdc_no].timing_mode = SUNXI_MMC_TIMING_MODE_1; //SUNXI_MMC_TIMING_MODE_3
 	else if (sdc_no == 2)
-		mmc_host[sdc_no].timing_mode = SUNXI_MMC_TIMING_MODE_4;
+		// as SUNXI_MMC_TIMING_MODE_4 does not work HS400/eMMC5.1
+		mmc_host[sdc_no].timing_mode = SUNXI_MMC_TIMING_MODE_1; // SUNXI_MMC_TIMING_MODE_4
 
 	strcpy(mmc->name, "SUNXI SD/MMC");
 	mmc->priv = &mmc_host[sdc_no];
