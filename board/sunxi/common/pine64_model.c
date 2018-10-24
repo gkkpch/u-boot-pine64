@@ -1,55 +1,33 @@
 
 #include <common.h>
 #include <asm/arch-sun50iw1p1/dram.h>
-
-#ifdef CONFIG_PINE64_MODEL_PINEBOOK_DETECTION
-int has_anx9807_chip(void);
-#endif
+#include <fdt_support.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
-#ifdef CONFIG_PINEBOOK_MODEL
-int has_anx9807_chip(void);
-#endif
-
-int get_model_from_dram_size(char* model)
-{
-#ifdef CONFIG_PINE64_MODEL_PINEBOOK_DETECTION
-	puts("check for ANX9807\n");
-	if (has_anx9807_chip()) {
-		puts("found ANX9807 chip\n");
-		sprintf(model, "pine64-pinebook");
-		return 0;
-	}
-#endif
-
-	__dram_para_t *dram_para = (__dram_para_t*)uboot_spare_head.boot_data.dram_para;
-
-	phys_size_t l = 512 * 1024 * 1024;
-	puts("get Pine64 model from DRAM size\n");
-	if (dram_para->dram_type == 7) {
-		puts("LPDDR3 -> SoPine\n");
-		sprintf(model, "pine64-sopine");
-	} else if (gd->ram_size > l) {
-		puts("DRAM >512M\n");
-		sprintf(model, "pine64-plus");
-	} else {
-		puts("DRAM <= 512M\n");
-		sprintf(model, "pine64");
-	}
-
-	return 0;
-}
-
 int pine64_set_model(void)
 {
-	char model[128] = {0};
-	get_model_from_dram_size(model);
+	int nodeoffset;
+	int ret;
+	char *model = NULL;
+
+	nodeoffset = fdt_path_offset(working_fdt, "/soc@01c00000/product");
+	if (nodeoffset < 0) {
+		printf("pine64_set_model: /soc@01c00000/product does not exist\n");
+		return -1;
+	}
+
+	ret = fdt_getprop_string(working_fdt, nodeoffset, "machine", &model);
+	if (ret < 0 || !model) {
+		printf("pine64_set_model: /soc@01c00000/product/machine does not exist\n");
+		return -1;
+	}
 
 	printf("Pine64 model: %s\n", model);
-	if(setenv("pine64_model", model))
-	{
+
+	if(setenv("pine64_model", model)) {
 		printf("error:set variable [pine64_model] fail\n");
 	}
+
 	return 0;
 }
