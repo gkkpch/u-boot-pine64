@@ -284,7 +284,7 @@
 #define CONFIG_SYS_HUSH_PARSER			/* use "hush" command parser	*/
 #define CONFIG_SYS_PROMPT_HUSH_PS2	"> "
 #define CONFIG_SYS_PROMPT		"sunxi#"
-#define CONFIG_SYS_CBSIZE	256			/* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE	768			/* Console I/O Buffer Size */
 #define CONFIG_SYS_PBSIZE	384			/* Print Buffer Size */
 #define CONFIG_SYS_MAXARGS	16			/* max number of command args */
 
